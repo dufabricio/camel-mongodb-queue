@@ -2,6 +2,7 @@
 
 https://github.com/apache/camel/blob/master/components/camel-mongodb3/src/main/docs/mongodb3-component.adoc
 
+https://blog.serverdensity.com/replacing-rabbitmq-with-mongodb/
 
 **Requirements**
 
