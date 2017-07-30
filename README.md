@@ -2,7 +2,11 @@
 
 https://github.com/apache/camel/blob/master/components/camel-mongodb3/src/main/docs/mongodb3-component.adoc
 
-https://blog.serverdensity.com/replacing-rabbitmq-with-mongodb/
+**References**
+
+  * https://blog.serverdensity.com/replacing-rabbitmq-with-mongodb/
+  * https://dzone.com/articles/why-and-how-replace-amazon-sqs
+  * http://shtylman.com/post/the-tail-of-mongodb/
 
 **Requirements**
 
