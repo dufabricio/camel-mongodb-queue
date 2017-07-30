@@ -1,13 +1,10 @@
 package com.edufabricio.server.endpoint;
 
 import com.edufabricio.server.BaseIntegrationTest;
-import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
 
 public class SenderServiceEndpointTest extends BaseIntegrationTest {
 
@@ -17,7 +14,7 @@ public class SenderServiceEndpointTest extends BaseIntegrationTest {
     @Test
     public void mustReturnUnauthorizedWhenUserIsNotAuthenticated() throws Exception {
         when()
-            .post(SENDER_ENDPOINT_REQUEST)
+            .post(SENDER_ENDPOINT_REQUEST, "{message:hello}")
             .then()
             .statusCode(HttpStatus.SC_OK);
     }

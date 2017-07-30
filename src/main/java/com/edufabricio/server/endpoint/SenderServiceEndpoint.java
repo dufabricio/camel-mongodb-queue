@@ -1,5 +1,6 @@
 package com.edufabricio.server.endpoint;
 
+import com.mongodb.client.result.UpdateResult;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.POST;
@@ -14,7 +15,7 @@ public class SenderServiceEndpoint {
     @POST
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON})
-    public String send(String message) {
+    public UpdateResult send(String message) {
         return null;
     }
 }

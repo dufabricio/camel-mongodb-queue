@@ -2,12 +2,18 @@ package com.edufabricio.server.route;
 
 import com.edufabricio.server.exception.BadRequestException;
 import com.edufabricio.server.exception.ResourceNotFoundException;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.Response;
+import java.util.Date;
 
 @Component
 @Slf4j
@@ -43,14 +49,30 @@ public class ApplicationRouteBuilder extends RouteBuilder {
                 .process(exchange -> exchange.getIn()
                         .removeHeader("Content-Length"));
 
+
         from("direct:send")
-                .to("bean:senderService?method=send(*)");
+                .process(new Processor() {
+                    @Override
+                    public void process(Exchange exchange) throws Exception {
+                        String jsonString = (String) exchange.getIn().getBody();
+                        BasicDBObject message = (BasicDBObject) JSON.parse(jsonString);
+                        message.put("dispatchedAt",new Date());
+                        exchange.getIn().setBody(message);
+                    }
+                })
+                .to("mongodb3:mongoClientBean?database=eventBus&collection=messages&operation=save");
 
 
     }
 
     private void configureReceiver() {
 
+       from("mongodb3:mongoClientBean?database=eventBus&collection=messages" +
+                "&tailTrackIncreasingField=dispatchedAt" +
+                "&persistentTailTracking=true")
+                .id("tailableCursorConsumer1")
+                .autoStartup(true)
+                .to("bean:receiverService?method=receive");
 
     }
 

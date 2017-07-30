@@ -118,7 +118,12 @@
             <artifactId>camel-cxf</artifactId>
             <version>${camel.version}</version>
         </dependency>
-
+        
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-mongodb3</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
   
         <!-- tests -->
         <dependency>
