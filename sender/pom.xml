@@ -4,17 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.edufabricio</groupId>
-    <artifactId>camel-mongodb-queue</artifactId>
+    <artifactId>camel-mongodb-queue-sender</artifactId>
     <version>1.0.RELEASE</version>
     <packaging>jar</packaging>
 
-    <name>camel-mongodb-queue</name>
+    <name>camel-mongodb-queue-sender</name>
     <description>Camel MongoDB Queue Example</description>
-
-    <modules>
-        <module>camel-mongodb-queue-sender</module>
-        <module>camel-mongodb-queue-receiver</module>
-    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

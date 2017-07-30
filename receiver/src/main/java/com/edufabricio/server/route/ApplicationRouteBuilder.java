@@ -3,13 +3,11 @@ package com.edufabricio.server.route;
 import com.edufabricio.server.exception.BadRequestException;
 import com.edufabricio.server.exception.ResourceNotFoundException;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.Response;
@@ -36,32 +34,7 @@ public class ApplicationRouteBuilder extends RouteBuilder {
             exchange.setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
         });
 
-        configureSender();
         configureReceiver();
-
-    }
-
-
-    private void configureSender() {
-
-        from("cxfrs:bean:sender?bindingStyle=SimpleConsumer")
-                .recipientList(simple("direct:${header.operationName}"))
-                .process(exchange -> exchange.getIn()
-                        .removeHeader("Content-Length"));
-
-
-        from("direct:send")
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        String jsonString = (String) exchange.getIn().getBody();
-                        BasicDBObject message = (BasicDBObject) JSON.parse(jsonString);
-                        message.put("dispatchedAt",new Date());
-                        exchange.getIn().setBody(message);
-                    }
-                })
-                .to("mongodb3:mongoClientBean?database=eventBus&collection=messages&operation=save");
-
 
     }
 
@@ -69,6 +42,7 @@ public class ApplicationRouteBuilder extends RouteBuilder {
 
        from("mongodb3:mongoClientBean?database=eventBus&collection=messages" +
                 "&tailTrackIncreasingField=dispatchedAt" +
+                "&persistentId=messagesTracker" +
                 "&persistentTailTracking=true")
                 .id("tailableCursorConsumer1")
                 .autoStartup(true)
